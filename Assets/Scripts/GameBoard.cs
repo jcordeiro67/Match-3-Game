@@ -123,6 +123,12 @@ public class GameBoard : MonoBehaviour {
 		return (x >= 0 && x < width && y >= 0 && y < height);
 	}
 
+	/// <summary>
+	/// Fills the random at x and y.
+	/// </summary>
+	/// <returns>The <see cref="GamePiece"/>.</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	GamePiece FillRandomAt(int x, int y)
 	{
 		GameObject randomPiece = Instantiate(GetRandomGamePiece(), Vector3.zero, Quaternion.identity) as GameObject;
@@ -140,14 +146,25 @@ public class GameBoard : MonoBehaviour {
 	/// </summary>
 	void FillBoard(){
 
+		int maxIterations = 100;
+		int iterations = 0;
+
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				
 				GamePiece piece = FillRandomAt(i,j);
+				iterations = 0;
 
 				while (HasMatchOnFill(i,j)) {
 					ClearPieceAt(i,j);
 					piece = FillRandomAt(i, j);
+					iterations++;
+
+					if (iterations >= maxIterations) {
+						
+						Debug.Log("Break ============================="); 
+						break;
+					}
 				}
 			}
 		}
