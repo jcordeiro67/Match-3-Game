@@ -30,8 +30,12 @@ public class GameBoard : MonoBehaviour {
 		SetupTiles();
 		SetupCamera();
 		FillRandom();
-		HighlightMatches();
+		//HighlightMatches();
 
+	}
+
+	void Update(){
+		//HighlightMatches();
 	}
 
 	/// <summary>
@@ -124,7 +128,7 @@ public class GameBoard : MonoBehaviour {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 
-				GameObject randomPiece = Instantiate(GetRandomGamePiece(), Vector3.zero, Quaternion.identity);
+				GameObject randomPiece = Instantiate(GetRandomGamePiece(), Vector3.zero, Quaternion.identity) as GameObject;
 
 				if (randomPiece != null) {
 					randomPiece.GetComponent<GamePiece>().Init(this);
@@ -169,6 +173,12 @@ public class GameBoard : MonoBehaviour {
 	/// <param name="targetTile">Target tile.</param>
 	void SwitchTiles(TileScript clickedTile, TileScript targetTile){
 
+		StartCoroutine(SwitchedTilesRoutine(clickedTile, targetTile));
+
+	}
+
+	IEnumerator SwitchedTilesRoutine(TileScript clickedTile, TileScript targetTile){
+
 		GamePiece clickedPiece = m_allGamePieces[clickedTile.xIndex, clickedTile.yIndex];
 		GamePiece targetPiece = m_allGamePieces[targetTile.xIndex, targetTile.yIndex];
 
@@ -177,6 +187,10 @@ public class GameBoard : MonoBehaviour {
 
 		// Swap targetPiece transfrom with clickedPiece
 		targetPiece.Move(clickedTile.xIndex, clickedTile.yIndex, swapTime);
+
+		yield return new WaitForSeconds(swapTime);
+		HighlightMatchesAt(clickedTile.xIndex, clickedTile.yIndex);
+		HighlightMatchesAt(targetTile.xIndex, targetTile.yIndex);
 
 	}
 
@@ -201,54 +215,61 @@ public class GameBoard : MonoBehaviour {
 		return false;
 	}
 
-	/// <summary>
-	/// Finds the matches.
-	/// </summary>
-	/// <returns>The matches.</returns>
-	/// <param name="startX">Start x.</param>
-	/// <param name="startY">Start y.</param>
-	/// <param name="searchDirection">Search direction.</param>
-	/// <param name="minLength">Minimum length.</param>
-	List<GamePiece> FindMatches(int startX, int startY, Vector2 searchDirection, int minLength = 3){
+	// general search method; specify a starting coordinate (startX, startY) and use a Vector2 for direction
+	// i.e. (1,0) = right, (-1,0) = left, (0,1) = up, (0,-1) = down; minLength is minimum number to be considered
+	// a match
 
+	List<GamePiece> FindMatches(int startX, int startY, Vector2 searchDirection, int minLength = 3)
+	{
 		List<GamePiece> matches = new List<GamePiece>();
+
 		GamePiece startPiece = null;
 
-		if (IsWithinBounds(startX, startY)) {
+		if (IsWithinBounds(startX, startY))
+		{
 			startPiece = m_allGamePieces[startX, startY];
 		}
 
-		if (startPiece != null) {
+		if (startPiece !=null)
+		{
 			matches.Add(startPiece);
+		}
 
-		} else {
+		else
+		{
 			return null;
 		}
 
 		int nextX;
 		int nextY;
 
-		int maxValue = (width > height) ? width : height;
+		int maxValue = (width > height) ? width: height;
 
-		for (int i = 0; i < maxValue; i++) {
-			nextX = startX + (int)Mathf.Clamp(searchDirection.x, -1, 1) * i;
-			nextY = startY + (int)Mathf.Clamp(searchDirection.y, -1, 1) * i;
+		for (int i = 1; i < maxValue - 1; i++)
+		{
+			nextX = startX + (int) Mathf.Clamp(searchDirection.x,-1,1) * i;
+			nextY = startY + (int) Mathf.Clamp(searchDirection.y,-1,1) * i;
 
-			if (!IsWithinBounds(nextX, nextY)) {
+			if (!IsWithinBounds(nextX, nextY))
+			{
 				break;
 			}
 
 			GamePiece nextPiece = m_allGamePieces[nextX, nextY];
 
-			if (nextPiece.matchValue == startPiece.matchValue && !matches.Contains(nextPiece)) {
+			if (nextPiece.matchValue == startPiece.matchValue && !matches.Contains(nextPiece))
+			{
 				matches.Add(nextPiece);
+			}
 
-			} else {
+			else
+			{
 				break;
 			}
 		}
 
-		if (matches.Count >= minLength) {
+		if (matches.Count >= minLength)
+		{
 			return matches;
 		}
 
@@ -256,85 +277,89 @@ public class GameBoard : MonoBehaviour {
 
 	}
 
-	/// <summary>
-	/// Finds the vertical matches.
-	/// </summary>
-	/// <returns>The vertical matches.</returns>
-	/// <param name="startX">Start x.</param>
-	/// <param name="startY">Start y.</param>
-	/// <param name="minLength">Minimum length.</param>
-	List<GamePiece> FindVerticalMatches(int startX, int startY, int minLength = 3){
-		
-		List<GamePiece> upwardMatches = FindMatches(startX, startY, new Vector2(0, 1), 2);
-		List<GamePiece> downwardMatches = FindMatches(startX, startY, new Vector2(0, -1), 2);
+	List<GamePiece> FindVerticalMatches(int startX, int startY, int minLength = 3)
+	{
+		List<GamePiece> upwardMatches = FindMatches(startX, startY, new Vector2(0,1), 2);
+		List<GamePiece> downwardMatches = FindMatches(startX, startY, new Vector2(0,-1), 2);
 
-		if(upwardMatches == null){
+		if (upwardMatches == null)
+		{
 			upwardMatches = new List<GamePiece>();
 		}
 
-		if (downwardMatches == null) {
+		if (downwardMatches == null)
+		{
 			downwardMatches = new List<GamePiece>();
 		}
 
-		var combineMatches = upwardMatches.Union(downwardMatches).ToList();
+		var combinedMatches = upwardMatches.Union(downwardMatches).ToList();
 
-		return (combineMatches.Count >= minLength) ? combineMatches : null;
+		return (combinedMatches.Count >= minLength) ? combinedMatches : null;
 
 	}
 
-	/// <summary>
-	/// Finds the horizontal matches.
-	/// </summary>
-	/// <returns>The horizontal matches.</returns>
-	/// <param name="startX">Start x.</param>
-	/// <param name="startY">Start y.</param>
-	/// <param name="minLength">Minimum length.</param>
-	List<GamePiece> FindHorizontalMatches(int startX, int startY, int minLength = 3){
-		
-		List<GamePiece> RightSideMatches = FindMatches(startX, startY, new Vector2(1, 0), 2);
-		List<GamePiece> LeftSideMatches = FindMatches(startX, startY, new Vector2(-1, 0), 2);
+	List<GamePiece> FindHorizontalMatches(int startX, int startY, int minLength = 3)
+	{
+		List<GamePiece> rightMatches = FindMatches(startX, startY, new Vector2(1,0), 2);
+		List<GamePiece> leftMatches = FindMatches(startX, startY, new Vector2(-1,0), 2);
 
-		if(RightSideMatches == null){
-			RightSideMatches = new List<GamePiece>();
+		if (rightMatches == null)
+		{
+			rightMatches = new List<GamePiece>();
 		}
 
-		if (LeftSideMatches == null) {
-			LeftSideMatches = new List<GamePiece>();
+		if (leftMatches == null)
+		{
+			leftMatches = new List<GamePiece>();
 		}
 
-		var combineMatches = RightSideMatches.Union(LeftSideMatches).ToList();
+		var combinedMatches = rightMatches.Union(leftMatches).ToList();
 
-		return (combineMatches.Count >= minLength) ? combineMatches : null;
+		return (combinedMatches.Count >= minLength) ? combinedMatches : null;
 
+	}
+
+	List<GamePiece> FindMatchesAt(int i, int j, int minLength =3)
+	{
+		List<GamePiece> horizMatches = FindHorizontalMatches(i, j, minLength);
+		List<GamePiece> vertMatches = FindVerticalMatches(i, j, minLength);
+		if (horizMatches == null) {
+			horizMatches = new List<GamePiece>();
+		}
+		if (vertMatches == null) {
+			vertMatches = new List<GamePiece>();
+		}
+		var combinedMatches = horizMatches.Union(vertMatches).ToList();
+		return combinedMatches;
+	}
+
+	void HighlightTileOff(int x, int y){
+		SpriteRenderer spriteRenderer = m_allTiles[x,y].GetComponent<SpriteRenderer>();
+		spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0);
+	}
+
+	void HighlightTileOn(int x, int y, Color col){
+		SpriteRenderer spriteRenderer = m_allTiles[x,y].GetComponent<SpriteRenderer>();
+		spriteRenderer.color = col;
+	}
+
+	void HighlightMatchesAt(int x, int y){
+		HighlightTileOff(x, y);
+		var combinedMatches = FindMatchesAt(x, y);
+		if (combinedMatches.Count > 0) {
+			foreach (GamePiece piece in combinedMatches) {
+				HighlightTileOn(piece.xIndex, piece.yIndex, piece.GetComponent<SpriteRenderer>().color);
+			}
+		}
 	}
 
 	void HighlightMatches(){
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				HighlightMatchesAt(i,j);
 
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-
-				SpriteRenderer spriteRenderer = m_allTiles[i, j].GetComponent<SpriteRenderer>();
-				spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0);
-
-				List<GamePiece> horizMaches = FindHorizontalMatches(i, j, 3);
-				List<GamePiece> vertMatches = FindVerticalMatches(i, j, 3);
-
-				if (horizMaches == null) {
-					horizMaches = new List<GamePiece>();
-				}
-
-				if (vertMatches == null) {
-					vertMatches = new List<GamePiece>();
-				}
-
-				var combinedMatches = horizMaches.Union(vertMatches).ToList();
-
-				if (combinedMatches.Count > 0) {
-					foreach (GamePiece piece in combinedMatches) {
-						spriteRenderer = m_allTiles[piece.xIndex, piece.yIndex].GetComponent<SpriteRenderer>();
-						spriteRenderer.color = piece.GetComponent<SpriteRenderer>().color;
-					}
-				}
 			}
 		}
 	}
