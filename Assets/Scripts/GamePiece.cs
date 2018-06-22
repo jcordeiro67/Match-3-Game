@@ -11,6 +11,8 @@ public class GamePiece : MonoBehaviour {
 	public InterpType interpolation = InterpType.SmootherStep;
 	public MatchValue matchValue;
 
+	public Color color;
+
 	private GameBoard m_board;
 	private bool m_isMoving = false;
 
@@ -27,11 +29,14 @@ public class GamePiece : MonoBehaviour {
 		Cyan,
 		Green,
 		Magenta,
+		Orange,
+		Pink,
 		Purple,
 		Red,
 		Teal,
 		White,
 		Yellow,
+		Brown,
 		Wild
 	}
 

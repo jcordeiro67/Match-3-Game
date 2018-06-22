@@ -55,8 +55,8 @@ MonoBehaviour:
   xIndex: 0
   yIndex: 0
   interpolation: 4
-  matchValue: 5
-  m_board: {fileID: 0}
+  matchValue: 7
+  color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!212 &212093562420480622
 SpriteRenderer:
   m_ObjectHideFlags: 1

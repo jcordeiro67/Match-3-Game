@@ -224,15 +224,15 @@ MonoBehaviour:
   width: 7
   height: 9
   borderSize: 2
-  swapTime: 0.5
+  swapTime: 0.25
   minSearchPieces: 3
   tilePrefab: {fileID: 1378397520809210, guid: 9cc8c2da334574be5992fc8c449e6ddd, type: 2}
   gamePiecePrefabs:
-  - {fileID: 1329775752420786, guid: aa07f7eb2b7044415b73fb8126ea48c7, type: 2}
-  - {fileID: 1025883782799706, guid: a00f0b3e3127e42be9486afbf2e07753, type: 2}
-  - {fileID: 1289731033963402, guid: 0f053c56269204f3b9d95bdf4fbdf11e, type: 2}
-  - {fileID: 1879638486623150, guid: aba470ef366e641b0a7665149dae9192, type: 2}
-  - {fileID: 1485863671989780, guid: 8d90f2676dfa64ba0af942b88703d886, type: 2}
+  - {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
+  - {fileID: 1006657164508748, guid: 859da803be57443b89593fe75239bf90, type: 2}
+  - {fileID: 1273743441067334, guid: 2e05ad1276bb94846bc4ac0a7e33d0d5, type: 2}
+  - {fileID: 1808120979127032, guid: 39c56da3619a9400fb15d79ed5b716ca, type: 2}
+  - {fileID: 1967670798481006, guid: afe8dadd18ff24be79fcb49040b1a5fa, type: 2}
 --- !u!4 &553127857
 Transform:
   m_ObjectHideFlags: 0
@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.23713236, g: 0.27690184, b: 0.375, a: 1}
+  m_Color: {r: 0, g: 0.20108825, b: 0.413, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
