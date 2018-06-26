@@ -9,60 +9,90 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1025883782799706}
+  m_RootGameObject: {fileID: 1234469669606426}
   m_IsPrefabParent: 1
---- !u!1 &1025883782799706
+--- !u!1 &1234469669606426
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4072971005851610}
-  - component: {fileID: 212093562420480622}
-  - component: {fileID: 114391038485336818}
+  - component: {fileID: 4055283806538500}
+  - component: {fileID: 212665094356137452}
+  - component: {fileID: 114705232303990600}
+  - component: {fileID: 61793512637361364}
   m_Layer: 0
-  m_Name: RedDot
+  m_Name: TileDoubleBreakable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4072971005851610
+--- !u!4 &4055283806538500
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1025883782799706}
+  m_GameObject: {fileID: 1234469669606426}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114391038485336818
+--- !u!61 &61793512637361364
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1234469669606426}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.5}
+  m_EdgeRadius: 0
+--- !u!114 &114705232303990600
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1025883782799706}
+  m_GameObject: {fileID: 1234469669606426}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cc4866a5c1d24c6d92516971c920a46, type: 3}
+  m_Script: {fileID: 11500000, guid: e9dee4ff7248c4248b011dfee7578adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   xIndex: 0
   yIndex: 0
-  interpolation: 4
-  matchValue: 7
-  color: {r: 0, g: 0, b: 0, a: 0}
---- !u!212 &212093562420480622
+  tileType: 2
+  breakableValue: 2
+  breakableSprites:
+  - {fileID: 21300000, guid: 0a98da77acc254439bd82440c319324a, type: 3}
+  - {fileID: 21300000, guid: 9251d779504a34bb9939ab74496cce26, type: 3}
+  - {fileID: 21300000, guid: 2d20d7be08acc46eba35c3d04718b57d, type: 3}
+  m_board: {fileID: 0}
+--- !u!212 &212665094356137452
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1025883782799706}
+  m_GameObject: {fileID: 1234469669606426}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -91,8 +121,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8cb9638ca97c9435da7acb88e68c477e, type: 3}
-  m_Color: {r: 0.85098046, g: 0.20000002, b: 0.24705884, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 0a98da77acc254439bd82440c319324a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
