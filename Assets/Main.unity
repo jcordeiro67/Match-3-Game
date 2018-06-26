@@ -226,13 +226,32 @@ MonoBehaviour:
   borderSize: 2
   swapTime: 0.25
   minSearchPieces: 3
-  tilePrefab: {fileID: 1378397520809210, guid: 9cc8c2da334574be5992fc8c449e6ddd, type: 2}
+  tileNormalPrefab: {fileID: 1378397520809210, guid: 9cc8c2da334574be5992fc8c449e6ddd,
+    type: 2}
+  tileObstaclePrefab: {fileID: 1547761353983162, guid: 91c4330dca240476484244f6de90d4ec,
+    type: 2}
   gamePiecePrefabs:
   - {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
   - {fileID: 1006657164508748, guid: 859da803be57443b89593fe75239bf90, type: 2}
   - {fileID: 1273743441067334, guid: 2e05ad1276bb94846bc4ac0a7e33d0d5, type: 2}
   - {fileID: 1808120979127032, guid: 39c56da3619a9400fb15d79ed5b716ca, type: 2}
   - {fileID: 1967670798481006, guid: afe8dadd18ff24be79fcb49040b1a5fa, type: 2}
+  startingTiles:
+  - tilePrefab: {fileID: 1547761353983162, guid: 91c4330dca240476484244f6de90d4ec,
+      type: 2}
+    x: 1
+    y: 4
+    z: 1
+  - tilePrefab: {fileID: 1547761353983162, guid: 91c4330dca240476484244f6de90d4ec,
+      type: 2}
+    x: 5
+    y: 4
+    z: 1
+  - tilePrefab: {fileID: 1526808984555024, guid: 123d9e980bfa94d82a98996fe6ce9044,
+      type: 2}
+    x: 2
+    y: 4
+    z: 1
 --- !u!4 &553127857
 Transform:
   m_ObjectHideFlags: 0
@@ -350,6 +369,7 @@ GameObject:
   - component: {fileID: 694432696}
   - component: {fileID: 694432698}
   - component: {fileID: 694432697}
+  - component: {fileID: 694432699}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -408,6 +428,23 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 694432695}
+--- !u!114 &694432699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 694432695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9dee4ff7248c4248b011dfee7578adb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xIndex: 0
+  yIndex: 0
+  tileType: 0
+  breakableValue: 0
+  breakableSprites: []
+  m_board: {fileID: 0}
 --- !u!1 &1281500868
 GameObject:
   m_ObjectHideFlags: 0

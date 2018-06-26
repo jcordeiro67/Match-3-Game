@@ -10,7 +10,8 @@ public class GameBoard : MonoBehaviour {
 	public int borderSize;					// Border around gameboard for orthoSize
 	public float swapTime = 0.5f;			// Time to complete swaping gamePieces
 	public int minSearchPieces = 3;			// Number of spaces to search for matches
-	public GameObject tilePrefab;			// Prefab gameboard tile piece
+	public GameObject tileNormalPrefab;		// Prefab gameboard tile piece
+	public GameObject tileObstaclePrefab;	// Prefab Obstacle tile piece
 
 	public GameObject[] gamePiecePrefabs;	// Array to hold prefabs to be used in the level
 
@@ -23,6 +24,17 @@ public class GameBoard : MonoBehaviour {
 
 	private bool m_playerInputEnabled = true;
 
+	public StartingTile[] startingTiles;
+
+	[System.Serializable]
+	public class StartingTile{
+
+		public GameObject tilePrefab;
+		public int x;
+		public int y;
+		public int z;
+	}
+
 	// Use this for initialization
 	void Start() {
 
@@ -31,10 +43,7 @@ public class GameBoard : MonoBehaviour {
 
 		SetupTiles();
 		SetupCamera();
-		FillBoard();
-
-		//ClearPieceAt(3,5);
-		//ClearPieceAt(4,6);
+		FillBoard(10, 1f);
 
 	}
 
@@ -56,20 +65,37 @@ public class GameBoard : MonoBehaviour {
 
 	}
 
+	void MakeTile(GameObject prefab, int x, int y, int z = 0)
+	{
+		if (prefab != null) {
+			
+			GameObject tile = Instantiate(prefab, new Vector3(x, y, z), Quaternion.identity) as GameObject;
+			tile.name = "Tile (" + x + "," + y + ")";
+			m_allTiles[x, y] = tile.GetComponent<TileScript>();
+			tile.transform.parent = transform;
+			m_allTiles[x, y].Init(x, y, this);
+		}
+	}
+
 	/// <summary>
 	/// Setups the tiles for the gameboard.
 	/// </summary>
 	void SetupTiles() {
 
+		foreach (StartingTile sTile in startingTiles) {
+			
+			if (sTile != null) {
+				MakeTile(sTile.tilePrefab, sTile.x, sTile.y, sTile.z);
+			}
+		}
+
 		for (int i = 0; i < width; i++) {
 			
 			for (int j = 0; j < height; j++) {
 
-				GameObject tile = Instantiate(tilePrefab, new Vector3(i, j, 0), Quaternion.identity) as GameObject;
-				tile.name = "Tile (" + i + "," + j + ")";
-				m_allTiles[i, j] = tile.GetComponent<TileScript>();
-				tile.transform.parent = transform;
-				m_allTiles[i, j].Init(i, j, this);
+				if (m_allTiles[i,j] == null) {
+					MakeTile(tileNormalPrefab, i, j);
+				}
 			}
 		}
 	}
@@ -147,7 +173,7 @@ public class GameBoard : MonoBehaviour {
 			
 			for (int j = 0; j < height; j++) {
 				// if the space is unoccupied and does not contain and Obstacle tile
-				if (m_allGamePieces[i,j]==null) {
+				if (m_allGamePieces[i,j]==null && m_allTiles[i,j].tileType != TileType.Obstacle) {
 					// Fill the space with a random prefab piece
 					GamePiece piece = FillRandomAt(i,j, falseYOffset, moveTime);
 					iterations = 0;
@@ -531,7 +557,7 @@ public class GameBoard : MonoBehaviour {
 
 		for (int i = 0; i < height -1; i++) {
 			
-			if (m_allGamePieces[column, i] == null) {
+			if (m_allGamePieces[column, i] == null && m_allTiles[column, i].tileType != TileType.Obstacle) {
 				for (int j = i+1; j < height; j++) {
 					
 					if (m_allGamePieces[column,j] !=null) {
@@ -613,7 +639,7 @@ public class GameBoard : MonoBehaviour {
 			yield return StartCoroutine(RefillRoutine());
 
 			matches = FindAllMatches();
-
+			// time to wait to restart clearAndCollapseRoutine
 			yield return new WaitForSeconds(0.5f);
 		} 
 
