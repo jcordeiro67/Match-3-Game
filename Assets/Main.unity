@@ -226,6 +226,8 @@ MonoBehaviour:
   borderSize: 2
   swapTime: 0.25
   minSearchPieces: 3
+  fillOffset: 10
+  fillMoveTime: 0.5
   tileNormalPrefab: {fileID: 1378397520809210, guid: 9cc8c2da334574be5992fc8c449e6ddd,
     type: 2}
   tileObstaclePrefab: {fileID: 1547761353983162, guid: 91c4330dca240476484244f6de90d4ec,
@@ -237,25 +239,38 @@ MonoBehaviour:
   - {fileID: 1808120979127032, guid: 39c56da3619a9400fb15d79ed5b716ca, type: 2}
   - {fileID: 1967670798481006, guid: afe8dadd18ff24be79fcb49040b1a5fa, type: 2}
   startingTiles:
-  - tilePrefab: {fileID: 1465778337685936, guid: 41376f878337c421d93a355f44da821c,
-      type: 2}
-    x: 2
+  - prefab: {fileID: 1547761353983162, guid: 91c4330dca240476484244f6de90d4ec, type: 2}
+    x: 0
     y: 4
     z: 1
-  - tilePrefab: {fileID: 1234469669606426, guid: 37f7b798c0df64112a9670250d8e1d17,
-      type: 2}
-    x: 2
-    y: 5
+  - prefab: {fileID: 1547761353983162, guid: 91c4330dca240476484244f6de90d4ec, type: 2}
+    x: 6
+    y: 4
     z: 1
-  - tilePrefab: {fileID: 1234469669606426, guid: 37f7b798c0df64112a9670250d8e1d17,
-      type: 2}
+  - prefab: {fileID: 1234469669606426, guid: 37f7b798c0df64112a9670250d8e1d17, type: 2}
     x: 4
-    y: 2
+    y: 3
     z: 1
-  - tilePrefab: {fileID: 1465778337685936, guid: 41376f878337c421d93a355f44da821c,
-      type: 2}
+  - prefab: {fileID: 1234469669606426, guid: 37f7b798c0df64112a9670250d8e1d17, type: 2}
     x: 4
     y: 5
+    z: 1
+  - prefab: {fileID: 1465778337685936, guid: 41376f878337c421d93a355f44da821c, type: 2}
+    x: 4
+    y: 4
+    z: 1
+  startingGamePieces:
+  - prefab: {fileID: 1497050418503188, guid: 52b4a5e0e84904d10b8ef95631b4e111, type: 2}
+    x: 1
+    y: 1
+    z: 1
+  - prefab: {fileID: 1497050418503188, guid: 035734b4f29534b2dbf9cac2ba94a10c, type: 2}
+    x: 3
+    y: 1
+    z: 1
+  - prefab: {fileID: 1497050418503188, guid: 50a646836a9db4d0da626dd0082918b4, type: 2}
+    x: 5
+    y: 1
     z: 1
 --- !u!4 &553127857
 Transform:

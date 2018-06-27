@@ -10,6 +10,8 @@ public class GameBoard : MonoBehaviour {
 	public int borderSize;					// Border around gameboard for orthoSize
 	public float swapTime = 0.5f;			// Time to complete swaping gamePieces
 	public int minSearchPieces = 3;			// Number of spaces to search for matches
+	public int fillOffset = 10;				// Distance the pieces start above the board
+	public float fillMoveTime = 0.5f;		// Time it takes a gamepiece to travel fromt the fillOfset into place
 	public GameObject tileNormalPrefab;		// Prefab gameboard tile piece
 	public GameObject tileObstaclePrefab;	// Prefab Obstacle tile piece
 
@@ -23,14 +25,15 @@ public class GameBoard : MonoBehaviour {
 
 	private bool m_playerInputEnabled = true;
 
-	public StartingTile[] startingTiles;
+	public StartingObject[] startingTiles;
+	public StartingObject[] startingGamePieces;
 
 	private ParticleManager m_particleManager;
 
 	[System.Serializable]
-	public class StartingTile{
+	public class StartingObject{
 
-		public GameObject tilePrefab;
+		public GameObject prefab;
 		public int x;
 		public int y;
 		public int z;
@@ -42,10 +45,10 @@ public class GameBoard : MonoBehaviour {
 		m_allTiles = new TileScript[width, height];
 		m_allGamePieces = new GamePiece[width, height];
 		m_particleManager = GameObject.FindObjectOfType<ParticleManager>();
-
+		SetupGamePieces();
 		SetupTiles();
 		SetupCamera();
-		FillBoard(10, 1f);
+		FillBoard(fillOffset, fillMoveTime);
 
 	}
 
@@ -67,9 +70,16 @@ public class GameBoard : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// Makes the tile.
+	/// </summary>
+	/// <param name="prefab">Prefab.</param>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
+	/// <param name="z">The z coordinate.</param>
 	void MakeTile(GameObject prefab, int x, int y, int z = 0)
 	{
-		if (prefab != null) {
+		if (prefab != null && IsWithinBounds(x,y)) {
 			
 			GameObject tile = Instantiate(prefab, new Vector3(x, y, z), Quaternion.identity) as GameObject;
 			tile.name = "Tile (" + x + "," + y + ")";
@@ -80,14 +90,36 @@ public class GameBoard : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Makes the game piece.
+	/// </summary>
+	/// <param name="prefab">Prefab.</param>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
+	/// <param name="falseYOffset">False Y offset.</param>
+	/// <param name="moveTime">Move time.</param>
+	void MakeGamePiece(GameObject prefab, int x, int y, int falseYOffset = 0, float moveTime = 0.1f)
+	{
+		if (prefab != null && IsWithinBounds(x,y)) {
+			prefab.GetComponent<GamePiece>().Init(this);
+			PlaceGamePiece(prefab.GetComponent<GamePiece>(), x, y);
+			if (falseYOffset != 0) {
+				prefab.transform.position = new Vector3(x, y + falseYOffset, 0);
+				prefab.GetComponent<GamePiece>().Move(x, y, moveTime);
+			}
+
+			prefab.transform.parent = transform;
+		}
+	}
+
+	/// <summary>
 	/// Setups the tiles for the gameboard.
 	/// </summary>
 	void SetupTiles() {
 
-		foreach (StartingTile sTile in startingTiles) {
+		foreach (StartingObject sTile in startingTiles) {
 			
 			if (sTile != null) {
-				MakeTile(sTile.tilePrefab, sTile.x, sTile.y, sTile.z);
+				MakeTile(sTile.prefab, sTile.x, sTile.y, sTile.z);
 			}
 		}
 
@@ -98,6 +130,16 @@ public class GameBoard : MonoBehaviour {
 				if (m_allTiles[i,j] == null) {
 					MakeTile(tileNormalPrefab, i, j);
 				}
+			}
+		}
+	}
+
+	void SetupGamePieces(){
+
+		foreach (StartingObject sPiece in startingGamePieces) {
+			if (sPiece != null) {
+				GameObject piece = Instantiate(sPiece.prefab, new Vector3(sPiece.x, sPiece.y, sPiece.z), Quaternion.identity) as GameObject;
+				MakeGamePiece(piece, sPiece.x, sPiece.y, fillOffset, fillMoveTime);
 			}
 		}
 	}
@@ -145,22 +187,18 @@ public class GameBoard : MonoBehaviour {
 		return (x >= 0 && x < width && y >= 0 && y < height);
 	}
 
-
 	// Places a random gamePiece at X Y with an optional Y offset and move time.
+	// Returns the randomPiece if with in bounds of the board else returns null.
 	GamePiece FillRandomAt(int x, int y, int falseYOffset = 0, float moveTime = 0.1f){
-		GameObject randomPiece = Instantiate(GetRandomGamePiece(), Vector3.zero, Quaternion.identity) as GameObject;
-		if (randomPiece != null) {
-			randomPiece.GetComponent<GamePiece>().Init(this);
-			PlaceGamePiece(randomPiece.GetComponent<GamePiece>(), x, y);
 
-			if (falseYOffset != 0) {
-				randomPiece.transform.position = new Vector3(x, y + falseYOffset, 0);
-				randomPiece.GetComponent<GamePiece>().Move(x, y, moveTime);
-			}
+		if (IsWithinBounds(x,y)) {
+			// generate random piece
+			GameObject randomPiece = Instantiate(GetRandomGamePiece(), Vector3.zero, Quaternion.identity) as GameObject;
 
-			randomPiece.transform.parent = transform;
+			MakeGamePiece(randomPiece, x, y, falseYOffset, moveTime);
 			return randomPiece.GetComponent<GamePiece>();
 		}
+
 		return null;
 	}
 
@@ -587,6 +625,21 @@ public class GameBoard : MonoBehaviour {
 		}
 	}
 
+	// clears entire board of all game pieces
+	void ClearBoard(){
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				ClearPieceAt(i,j);
+			}
+		}
+	}
+
+	void ClearAndRefillBoard(List<GamePiece> gamePieces){
+
+		StartCoroutine(ClearAndRefilBoardRoutine(gamePieces));
+	}
+
 	// collapses the column with empty pieces
 	// returns the list of moving pieces
 	List<GamePiece> CollapseColumn(int column, float collapseTime = 0.1f){
@@ -646,22 +699,6 @@ public class GameBoard : MonoBehaviour {
 		return columns;
 	}
 
-	// clears entire board of all game pieces
-	void ClearBoard(){
-
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				ClearPieceAt(i,j);
-			}
-		}
-	}
-
-
-	void ClearAndRefillBoard(List<GamePiece> gamePieces){
-
-		StartCoroutine(ClearAndRefilBoardRoutine(gamePieces));
-	}
-
 	IEnumerator ClearAndRefilBoardRoutine(List<GamePiece> gamePieces){
 
 		m_playerInputEnabled = false;
@@ -687,7 +724,7 @@ public class GameBoard : MonoBehaviour {
 
 	// refils the board with a optional offset
 	IEnumerator RefillRoutine(){
-		FillBoard(10, 0.3f);
+		FillBoard(fillOffset, fillMoveTime);
 		yield return null;
 	}
 
