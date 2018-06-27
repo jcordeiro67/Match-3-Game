@@ -15,7 +15,6 @@ public class GameBoard : MonoBehaviour {
 
 	public GameObject[] gamePiecePrefabs;	// Array to hold prefabs to be used in the level
 
-
 	private TileScript[,] m_allTiles;		// Array to hold cordinates of boardTiles
 	private GamePiece[,] m_allGamePieces;	// Array to hold cordinates of gamePieces
 
@@ -25,6 +24,8 @@ public class GameBoard : MonoBehaviour {
 	private bool m_playerInputEnabled = true;
 
 	public StartingTile[] startingTiles;
+
+	private ParticleManager m_particleManager;
 
 	[System.Serializable]
 	public class StartingTile{
@@ -40,6 +41,7 @@ public class GameBoard : MonoBehaviour {
 
 		m_allTiles = new TileScript[width, height];
 		m_allGamePieces = new GamePiece[width, height];
+		m_particleManager = GameObject.FindObjectOfType<ParticleManager>();
 
 		SetupTiles();
 		SetupCamera();
@@ -544,7 +546,7 @@ public class GameBoard : MonoBehaviour {
 			Destroy(pieceToClear.gameObject);
 		}
 
-		HighlightTileOff(x,y);
+		//HighlightTileOff(x,y);
 	}
 
 	// Clears the piece at gamePieces.
@@ -553,6 +555,9 @@ public class GameBoard : MonoBehaviour {
 		foreach (GamePiece piece in gamePieces) {
 			if (piece != null) {
 				ClearPieceAt(piece.xIndex, piece.yIndex);
+				if (m_particleManager != null) {
+					m_particleManager.ClearPieceFXAt(piece.xIndex, piece.yIndex);
+				}
 			}
 		}
 	}
@@ -562,7 +567,12 @@ public class GameBoard : MonoBehaviour {
 
 		TileScript tileToBreak = m_allTiles[x, y];
 
-		if (tileToBreak != null) {
+		if (tileToBreak != null && tileToBreak.tileType == TileType.Breakable) {
+			
+			if (m_particleManager != null) {
+				m_particleManager.BreakTileFXAt(tileToBreak.breakableValue, x, y, 0);
+			}
+
 			tileToBreak.BreakTile();
 		}
 	}
@@ -668,7 +678,7 @@ public class GameBoard : MonoBehaviour {
 
 			matches = FindAllMatches();
 			// time to wait to restart clearAndCollapseRoutine
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.2f);
 		} 
 
 		while (matches.Count != 0);
@@ -677,7 +687,7 @@ public class GameBoard : MonoBehaviour {
 
 	// refils the board with a optional offset
 	IEnumerator RefillRoutine(){
-		FillBoard(10, 0.5f);
+		FillBoard(10, 0.3f);
 		yield return null;
 	}
 
@@ -688,9 +698,9 @@ public class GameBoard : MonoBehaviour {
 		List<GamePiece> movingPieces = new List<GamePiece>();
 		List<GamePiece> matches = new List<GamePiece>();
 
-		HighlightPieces(gamePieces);
+		//HighlightPieces(gamePieces);
 		// length the pieces remain highlighted before clearing
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(0.2f);
 		bool isFinished = false;
 
 		while (!isFinished) {

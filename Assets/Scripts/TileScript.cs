@@ -85,6 +85,7 @@ public class TileScript : MonoBehaviour {
 			tileType = TileType.Normal;
 			// Either change spriteRenderer color or swap sprite with normal tile from m_board
 			m_spriteRenderer.sprite = m_board.tileNormalPrefab.GetComponent<SpriteRenderer>().sprite;
+			m_spriteRenderer.color = new Color(m_spriteRenderer.color.r, m_spriteRenderer.color.g, m_spriteRenderer.color.b, 0);
 		}
 	}
 }
