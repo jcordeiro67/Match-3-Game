@@ -270,6 +270,10 @@ MonoBehaviour:
     x: 6
     y: 4
     z: 1
+  - prefab: {fileID: 1718555629001152, guid: b763849054c3044bb9cd6a53b5bc0c55, type: 2}
+    x: 4
+    y: 7
+    z: 1
   - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
     x: 5
     y: 5

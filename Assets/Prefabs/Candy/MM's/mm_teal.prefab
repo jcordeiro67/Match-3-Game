@@ -56,7 +56,7 @@ MonoBehaviour:
   yIndex: 0
   interpolation: 4
   matchValue: 8
-  color: {r: 0.011764707, g: 0.8470589, b: 0.83921576, a: 0}
+  matchValueRBG: {r: 0.011764707, g: 0.8431373, b: 0.83921576, a: 1}
 --- !u!212 &212378204498429936
 SpriteRenderer:
   m_ObjectHideFlags: 1

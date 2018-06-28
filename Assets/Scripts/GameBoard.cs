@@ -741,8 +741,11 @@ public class GameBoard : MonoBehaviour {
 
 			// find gamepieces affected by bombs
 			bombedPieces = GetBombedPieces(gamePieces);
-
 			// merge bombedPieces list with gamePieces
+			gamePieces = gamePieces.Union(bombedPieces).ToList();
+
+			// string bombs together
+			bombedPieces = GetBombedPieces(gamePieces);
 			gamePieces = gamePieces.Union(bombedPieces).ToList();
 
 			// clear game pieces and tiles
