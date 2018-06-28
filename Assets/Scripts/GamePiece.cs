@@ -11,10 +11,11 @@ public class GamePiece : MonoBehaviour {
 	public InterpType interpolation = InterpType.SmootherStep;
 	public MatchValue matchValue;
 
-	public Color color;
+	public Color matchValueRBG;
 
 	private GameBoard m_board;
 	private bool m_isMoving = false;
+
 
 	public enum InterpType{
 		Linear,
@@ -168,4 +169,40 @@ public class GamePiece : MonoBehaviour {
 	}
 
 
+	public void ChangeColor(GamePiece pieceToMatch){
+		
+		SpriteRenderer rendererToChange = GetComponent<SpriteRenderer>();
+
+		Color colorToMatch = Color.clear;
+
+		if (pieceToMatch != null) {
+			
+			SpriteRenderer rendererToMatch = pieceToMatch.GetComponent<SpriteRenderer>();
+
+			if (rendererToMatch != null && rendererToChange != null) {
+				
+				rendererToChange.color = rendererToMatch.color;
+			}
+			matchValue = pieceToMatch.matchValue;
+		}
+	}
+
+	public void ChangeSprite(GamePiece pieceToMatch){
+
+		Sprite spriteToChange = null;
+
+		SpriteRenderer rendererToChange = GetComponent<SpriteRenderer>();
+
+		if(pieceToMatch != null){
+
+			SpriteRenderer rendererToMatch = pieceToMatch.GetComponent<SpriteRenderer>();
+
+			if (rendererToMatch != null && rendererToChange != null) {
+				
+				rendererToChange.sprite = rendererToMatch.sprite;
+			}
+
+			matchValue = pieceToMatch.matchValue;
+		}
+	}
 }
