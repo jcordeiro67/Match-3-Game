@@ -57,3 +57,5 @@ MonoBehaviour:
     type: 2}
   doubleBreakFXPrefab: {fileID: 1340710503950338, guid: d79ff5cafd24d46bf93fed2e31de86f2,
     type: 2}
+  bombFXPrefab: {fileID: 1598729848185296, guid: 45758d28046c641f484573d12c61e3b4,
+    type: 2}

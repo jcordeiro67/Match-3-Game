@@ -7,6 +7,10 @@ public class ParticleManager : MonoBehaviour {
 	public GameObject clearFXPrefab;
 	public GameObject breakFXPrefab;
 	public GameObject doubleBreakFXPrefab;
+	public GameObject bombFXPrefab;
+	//public GameObject columnBombFXPrefab;
+	//public GameObject rowBombFXPrefab;
+	//public GameObject colorBombFXPrefab;
 
 	public void ClearPieceFXAt(int x, int y, int z=0){
 
@@ -45,5 +49,20 @@ public class ParticleManager : MonoBehaviour {
 				particlePlayer.Play();
 			}
 		}
+	}
+
+	// add BombType bombType to paramaters
+	public void BombFXAt(int x, int y, int z =0){
+		//TODO: Change this to work with an switch of the bombType to play different FX for 
+		// each type of bomb
+
+		if (bombFXPrefab != null) {
+			
+			GameObject bombFX = Instantiate(bombFXPrefab, new Vector3(x, y, z), Quaternion.identity) as GameObject;
+			ParticlePlayer particlePlayer = bombFX.GetComponent<ParticlePlayer>();
+			particlePlayer.Play();
+
+		}
+
 	}
 }

@@ -583,14 +583,30 @@ public class GameBoard : MonoBehaviour {
 		//HighlightTileOff(x,y);
 	}
 
-	// Clears the piece at gamePieces.
-	void ClearPieceAt(List<GamePiece> gamePieces){
+	// Clears the gamePieces and plays the proper clear or bomb FX.
+	void ClearPieceAt(List<GamePiece> gamePieces, List<GamePiece> bombedPieces){
 		
 		foreach (GamePiece piece in gamePieces) {
+			
 			if (piece != null) {
+				
 				ClearPieceAt(piece.xIndex, piece.yIndex);
+
 				if (m_particleManager != null) {
-					m_particleManager.ClearPieceFXAt(piece.xIndex, piece.yIndex);
+					
+					// play bombFX 
+					if (bombedPieces.Contains(piece)) {
+						// get bomb component from gameObject
+						// check that bomb component is not null
+						// add bombType to paramaters
+						m_particleManager.BombFXAt(piece.xIndex, piece.yIndex);
+					}
+
+					else{
+						// play clearFX
+						m_particleManager.ClearPieceFXAt(piece.xIndex, piece.yIndex);
+					}
+
 				}
 			}
 		}
@@ -748,8 +764,9 @@ public class GameBoard : MonoBehaviour {
 			bombedPieces = GetBombedPieces(gamePieces);
 			gamePieces = gamePieces.Union(bombedPieces).ToList();
 
-			// clear game pieces and tiles
-			ClearPieceAt(gamePieces);
+			// clear game pieces and bombed pieces
+			ClearPieceAt(gamePieces, bombedPieces);
+			// clear tile pieces
 			BreakTileAt(gamePieces);
 
 			// add bombs here
