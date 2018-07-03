@@ -240,6 +240,8 @@ MonoBehaviour:
   - {fileID: 1967670798481006, guid: afe8dadd18ff24be79fcb49040b1a5fa, type: 2}
   adjacentBombPrefab: {fileID: 1538076470088106, guid: a500ec23ed7fd4ea8ad8e1a7d4cc9813,
     type: 2}
+  colorBombPrefab: {fileID: 1286959537858436, guid: dc4bee3505f3749688b9f940ae4f9591,
+    type: 2}
   columnBombPrefab: {fileID: 1774368109633242, guid: b017bbcde607049d5abeba769e727342,
     type: 2}
   rowBombPrefab: {fileID: 1725992835794874, guid: 6bf751bce745944509e06b6d3d9b04b2,
@@ -259,23 +261,11 @@ MonoBehaviour:
     y: 6
     z: 1
   - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
-    x: 4
-    y: 5
-    z: 1
-  - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
-    x: 5
-    y: 4
-    z: 1
-  - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
-    x: 6
-    y: 4
-    z: 1
-  - prefab: {fileID: 1718555629001152, guid: b763849054c3044bb9cd6a53b5bc0c55, type: 2}
-    x: 4
+    x: 3
     y: 7
     z: 1
   - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
-    x: 5
+    x: 4
     y: 5
     z: 1
 --- !u!4 &553127857

@@ -2,6 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Moved to outside the class to make public
+public enum MatchValue{
+	Blue,
+	Cyan,
+	Green,
+	Magenta,
+	Orange,
+	Pink,
+	Purple,
+	Red,
+	Teal,
+	White,
+	Yellow,
+	Brown,
+	Wild,
+	None
+}
+
 
 public class GamePiece : MonoBehaviour {
 
@@ -23,22 +41,6 @@ public class GamePiece : MonoBehaviour {
 		EaseIn,
 		SmoothStep,
 		SmootherStep
-	}
-
-	public enum MatchValue{
-		Blue,
-		Cyan,
-		Green,
-		Magenta,
-		Orange,
-		Pink,
-		Purple,
-		Red,
-		Teal,
-		White,
-		Yellow,
-		Brown,
-		Wild
 	}
 
 	// Use this for initialization

@@ -17,7 +17,7 @@ public class GameBoard : MonoBehaviour {
 	public GameObject tileObstaclePrefab;	// Prefab Obstacle tile piece
 	public GameObject[] gamePiecePrefabs;	// Array to hold prefabs to be used in the level
 	public GameObject adjacentBombPrefab;
-	//public GameObject colorBombPrefab;
+	public GameObject colorBombPrefab;
 	public GameObject columnBombPrefab;
 	public GameObject rowBombPrefab;
 
@@ -315,12 +315,37 @@ public class GameBoard : MonoBehaviour {
 
 				List<GamePiece> clickedPieceMatches = FindMatchesAt(clickedTile.xIndex, clickedTile.yIndex);
 				List<GamePiece> targetPieceMatches = FindMatchesAt(targetTile.xIndex, targetTile.yIndex);
+				List<GamePiece> colorMatches = new List<GamePiece>();
 
-				// If no match return pieces to original spot
-				if (targetPieceMatches.Count == 0 && targetPieceMatches.Count == 0) {
+				// Determine if one of the switched pieces was a colorBomb
+				// If colorBomb is clickedPiece match clickedPiece color
+				if (IsColorBomb(clickedPiece) && !IsColorBomb(targetPiece)) {
+					clickedPiece.matchValue = targetPiece.matchValue;
+					colorMatches = FindAllMatchValue(clickedPiece.matchValue);
+				}
+				// If colorBomb is targetPiece match targetPieces color
+				else if (IsColorBomb(targetPiece) && !IsColorBomb(clickedPiece)) {
+					targetPiece.matchValue = clickedPiece.matchValue;
+					colorMatches = FindAllMatchValue(targetPiece.matchValue);
+				}
+				// If both pieces are colorBombs search all gamePieces
+				// if not in colorMatches list add to list
+				else if (IsColorBomb(clickedPiece) && IsColorBomb(targetPiece)) {
+					
+					foreach (GamePiece piece in m_allGamePieces) {
+						
+						if (!colorMatches.Contains(piece)) {
+							colorMatches.Add(piece);
+						}
+					}
+				}
+
+				// If no valid match has been made move pieces back to original location
+				if (targetPieceMatches.Count == 0 && targetPieceMatches.Count == 0 && colorMatches.Count == 0) {
 					clickedPiece.Move(clickedTile.xIndex, clickedTile.yIndex, swapTime);
 					targetPiece.Move(targetTile.xIndex, targetTile.yIndex, swapTime);
-				} 
+				}
+
 				else {
 
 					yield return new WaitForSeconds(swapTime);
@@ -332,18 +357,27 @@ public class GameBoard : MonoBehaviour {
 
 					// Change the bombs sprite to match either the target piece or the clicked piece
 					if (m_clickedTileBomb != null && targetPiece != null) {
+						
 						// match the target piece
 						GamePiece clickedBomPiece = m_clickedTileBomb.GetComponent<GamePiece>();
-						clickedBomPiece.ChangeSprite(targetPiece);
+
+						if (!IsColorBomb(clickedBomPiece)) {
+							clickedBomPiece.ChangeSprite(targetPiece);
+						}
 					}
 
 					if (m_targetTileBomb != null && clickedPiece != null) {
+						
 						// match the clicked piece
 						GamePiece targetBombPiece = m_targetTileBomb.GetComponent<GamePiece>();
-						targetBombPiece.ChangeSprite(clickedPiece);
+
+						if (!IsColorBomb(targetBombPiece)) {
+							targetBombPiece.ChangeSprite(clickedPiece);
+						}
 					}
 
-					ClearAndRefillBoard(clickedPieceMatches.Union(targetPieceMatches).ToList());
+					// Appends the lists colorMatches and TargetPieceMatches to clickedPieceMatches
+					ClearAndRefillBoard(clickedPieceMatches.Union(targetPieceMatches).ToList().Union(colorMatches).ToList());
 				}
 			}
 		}
@@ -942,6 +976,9 @@ public class GameBoard : MonoBehaviour {
 		return (horizontal && vertical);
 	}
 
+	// Searches the list of gamePieces for more then 4 in a row and 
+	// Drops a bomb at X, Y and determines which bombType to drop by swapDirection
+	// returns the bomb
 	GameObject DropBomb(int x, int y, Vector2 swapDirection, List<GamePiece> gamePieces){
 
 		GameObject bomb = null;
@@ -956,15 +993,29 @@ public class GameBoard : MonoBehaviour {
 				}
 			}
 			else {
-				// row bomb
-				if (swapDirection.x != 0) {
-					bomb = MakeBomb(rowBombPrefab, x, y);
 
+				if (gamePieces.Count >= 5) {
+					if (colorBombPrefab != null) {
+						bomb = MakeBomb(colorBombPrefab, x, y);
+					}
 				}
-				else {
-					// column bomb
-					bomb = MakeBomb(columnBombPrefab, x,y);
 
+				else {
+					
+					// row bomb
+					if (swapDirection.x != 0) {
+						if (rowBombPrefab != null) {
+							bomb = MakeBomb(rowBombPrefab, x, y);
+						}
+					}
+
+					else {
+						
+						if (columnBombPrefab != null) {
+							// column bomb
+							bomb = MakeBomb(columnBombPrefab, x,y);
+						}
+					}
 				}
 			}
 		}
@@ -972,6 +1023,8 @@ public class GameBoard : MonoBehaviour {
 		return bomb;
 	}
 
+	// Activates the bomb after it has been dropped
+	// adds the bomb to the list m_allGamePieces as a gamePiece
 	void ActivateBomb(GameObject bomb){
 
 		int x = (int)bomb.transform.position.x;
@@ -981,5 +1034,38 @@ public class GameBoard : MonoBehaviour {
 			m_allGamePieces[x, y] = bomb.GetComponent<GamePiece>();
 		}
 	}
+
+	// Finds matching gamePieces by MatchValue
+	// returns a list of foundPieces with same value
+	List<GamePiece> FindAllMatchValue(MatchValue mValue){
+
+		List<GamePiece> foundPieces = new List<GamePiece>();
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				if(m_allGamePieces[i,j] != null){
+					if (m_allGamePieces[i,j].matchValue == mValue) {
+						foundPieces.Add(m_allGamePieces[i,j]);
+					}
+				}
+			}
+		}
+
+		return foundPieces;
+	}
+
+	// Checks if a bomb piece is swapped with a color piece
+	// returns true if bombType is color false if not
+	bool IsColorBomb(GamePiece gamePiece){
+
+		Bomb bomb = gamePiece.GetComponent<Bomb>();
+
+		if (bomb != null) {
+			return (bomb.bombType == BombType.Color);
+		}
+
+		return false;
+	}
+
 		
 }
