@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d5a2494c2f6845f8af073942db2930c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 7
+  width: 9
   height: 9
   borderSize: 2
   swapTime: 0.25
@@ -246,28 +246,31 @@ MonoBehaviour:
     type: 2}
   rowBombPrefab: {fileID: 1725992835794874, guid: 6bf751bce745944509e06b6d3d9b04b2,
     type: 2}
+  maxColectibles: 3
+  collectibleCount: 0
+  chanceForCollectible: 0.044
+  collectibleRotation: {x: 0, y: 0, z: -45}
+  collectiblePrefabs:
+  - {fileID: 1080677963695464, guid: ed984f32d82af4b849c5a6137966e64c, type: 2}
+  - {fileID: 1070398768357834, guid: f9cb4f94acad84497a2751671b08a43f, type: 2}
   startingTiles: []
   startingGamePieces:
-  - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
-    x: 3
-    y: 3
-    z: 1
-  - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
-    x: 3
-    y: 4
-    z: 1
-  - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
-    x: 3
-    y: 6
-    z: 1
-  - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
-    x: 3
-    y: 7
-    z: 1
-  - prefab: {fileID: 1053698682775816, guid: 780ad9a57620d48918fd809642105302, type: 2}
+  - prefab: {fileID: 1070398768357834, guid: f9cb4f94acad84497a2751671b08a43f, type: 2}
+    x: 4
+    y: 8
+    z: 0
+  - prefab: {fileID: 1184706656329236, guid: 3c69af7760b0e42fc8047f2784cc91fb, type: 2}
     x: 4
     y: 5
-    z: 1
+    z: 0
+  - prefab: {fileID: 1967670798481006, guid: afe8dadd18ff24be79fcb49040b1a5fa, type: 2}
+    x: 4
+    y: 4
+    z: 0
+  - prefab: {fileID: 1967670798481006, guid: afe8dadd18ff24be79fcb49040b1a5fa, type: 2}
+    x: 5
+    y: 6
+    z: 0
 --- !u!4 &553127857
 Transform:
   m_ObjectHideFlags: 0

@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collectible : MonoBehaviour {
+public class Collectible : GamePiece {
 
-	// Use this for initialization
-	void Start () {
-		
+	public bool clearedByBomb = false;
+	public bool clearedByBottom = true;
+
+	void Start() {
+		matchValue = MatchValue.None;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }
