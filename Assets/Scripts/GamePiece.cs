@@ -30,6 +30,7 @@ public class GamePiece : MonoBehaviour {
 	public MatchValue matchValue;
 
 	public Color matchValueRBG;
+	public int scoreValue = 20;
 
 	private GameBoard m_board;
 	private bool m_isMoving = false;
@@ -191,7 +192,7 @@ public class GamePiece : MonoBehaviour {
 
 	public void ChangeSprite(GamePiece pieceToMatch){
 
-		Sprite spriteToChange = null;
+		//Sprite spriteToChange = null;
 
 		SpriteRenderer rendererToChange = GetComponent<SpriteRenderer>();
 
@@ -205,6 +206,13 @@ public class GamePiece : MonoBehaviour {
 			}
 
 			matchValue = pieceToMatch.matchValue;
+		}
+	}
+
+	public void ScorePoints(int multiplier = 1, int bonus = 0){
+
+		if (ScoreManager.Instance != null) {
+			ScoreManager.Instance.AddScore(scoreValue * multiplier + bonus);
 		}
 	}
 }

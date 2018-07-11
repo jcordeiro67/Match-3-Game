@@ -22,6 +22,7 @@ public class GameBoard : MonoBehaviour {
 
 	public int maxColectibles = 3;
 	public int collectibleCount = 0;
+	private int m_scoreMultiplier = 0;
 
 	[Range(0,1)]
 	public float chanceForCollectible = 0.1f;
@@ -38,6 +39,13 @@ public class GameBoard : MonoBehaviour {
 	private GameObject m_targetTileBomb;
 
 	private bool m_playerInputEnabled = true;
+
+	public bool PlayerInputEnabled{
+
+		get{
+			return m_playerInputEnabled;
+		}
+	}
 
 	public StartingObject[] startingTiles;
 	public StartingObject[] startingGamePieces;
@@ -59,14 +67,18 @@ public class GameBoard : MonoBehaviour {
 		m_allTiles = new TileScript[width, height];
 		m_allGamePieces = new GamePiece[width, height];
 		m_particleManager = GameObject.FindObjectOfType<ParticleManager>();
+
+
+	}
+
+	public void SetupBoard()
+	{
 		SetupTiles();
 		SetupGamePieces();
 		List<GamePiece> startingCollectibles = FindAllCollectibles();
 		collectibleCount = startingCollectibles.Count;
-
 		SetupCamera();
 		FillBoard(fillOffset, fillMoveTime);
-
 	}
 
 	void Update(){
@@ -162,6 +174,10 @@ public class GameBoard : MonoBehaviour {
 		foreach (StartingObject sPiece in startingGamePieces) {
 			if (sPiece != null) {
 				GameObject piece = Instantiate(sPiece.prefab, new Vector3(sPiece.x, sPiece.y, sPiece.z), Quaternion.identity) as GameObject;
+				Collectible collectibleComponent = piece.GetComponent<Collectible>();
+				if(collectibleComponent != null){
+					piece.transform.Rotate(collectibleRotation);
+				}
 				MakeGamePiece(piece, sPiece.x, sPiece.y, fillOffset, fillMoveTime);
 			}
 		}
@@ -394,6 +410,12 @@ public class GameBoard : MonoBehaviour {
 				}
 
 				else {
+
+					// Deduct 1 from movesLeft
+					if (GameManager.Instance != null) {
+						GameManager.Instance.movesLeft--;
+						GameManager.Instance.UpdateMoves();
+					}
 
 					yield return new WaitForSeconds(swapTime);
 
@@ -665,6 +687,7 @@ public class GameBoard : MonoBehaviour {
 	}
 
 	// Clears the gamePieces and plays the proper clear or bomb FX.
+	// Scores the pieces points
 	void ClearPieceAt(List<GamePiece> gamePieces, List<GamePiece> bombedPieces){
 		
 		foreach (GamePiece piece in gamePieces) {
@@ -672,6 +695,13 @@ public class GameBoard : MonoBehaviour {
 			if (piece != null) {
 				
 				ClearPieceAt(piece.xIndex, piece.yIndex);
+
+				int bonus = 0;
+				if (gamePieces.Count >= 4) {
+					bonus = 20;
+				}
+
+				piece.ScorePoints(m_scoreMultiplier, bonus);
 
 				if (m_particleManager != null) {
 					
@@ -797,8 +827,13 @@ public class GameBoard : MonoBehaviour {
 		m_playerInputEnabled = false;
 
 		List<GamePiece> matches = gamePieces;
+		m_scoreMultiplier = 0;
 
 		do {
+			// Increases the score multiplier by 1 evertime a collapse is made before 
+			// the player moves another piece
+			m_scoreMultiplier ++;
+
 			//Clear and Collapse board
 			yield return StartCoroutine(ClearAndCollapseRoutine(matches));
 			yield return null;
@@ -888,7 +923,7 @@ public class GameBoard : MonoBehaviour {
 			collectedPieces = FindCollectiblesAt(0, true);
 			matches = matches.Union(collectedPieces).ToList();
 
-			// if no patches or collectibles found
+			// if no matches or collectibles found
 			if (matches.Count == 0) {
 				// exit loop
 				isFinished = true;
@@ -896,6 +931,9 @@ public class GameBoard : MonoBehaviour {
 			} 
 
 			else {
+				
+				// Increase scoreMultiplier
+				m_scoreMultiplier++;
 				// return to this coroutine
 				yield return StartCoroutine(ClearAndCollapseRoutine(matches));
 			}
