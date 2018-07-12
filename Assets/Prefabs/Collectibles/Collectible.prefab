@@ -57,7 +57,7 @@ MonoBehaviour:
   interpolation: 4
   matchValue: 13
   matchValueRBG: {r: 1, g: 0.45882356, b: 0.12941177, a: 1}
-  scoreValue: 2500
+  scoreValue: 500
   clearedByBomb: 0
   clearedByBottom: 1
 --- !u!212 &212258746459818840

@@ -88,7 +88,7 @@ MonoBehaviour:
   interpolation: 4
   matchValue: 12
   matchValueRBG: {r: 1, g: 1, b: 1, a: 1}
-  scoreValue: 1000
+  scoreValue: 300
   bombType: 4
 --- !u!198 &198493701854367988
 ParticleSystem:

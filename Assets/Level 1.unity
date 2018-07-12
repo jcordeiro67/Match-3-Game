@@ -184,6 +184,67 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Level 999
+--- !u!1 &398644791
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 398644792}
+  - component: {fileID: 398644793}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &398644792
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 398644791}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1197643429}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &398644793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 398644791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdc8ae43da5624249b3f08b4889f5a82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicClips:
+  - {fileID: 8300000, guid: e5e029a21fda14206a9ff1423a1302a9, type: 3}
+  - {fileID: 8300000, guid: e75e89afb6e1648e7a4a2ac64328a7c0, type: 3}
+  winClips:
+  - {fileID: 8300000, guid: 5f9fb0bfcf06e4304aab13b97645fe13, type: 3}
+  - {fileID: 8300000, guid: b43b2e7180aa04f788c269504edc72de, type: 3}
+  loosClips:
+  - {fileID: 8300000, guid: ed4ad50d33af142e6be4b65f4d37e37c, type: 3}
+  bonusClips:
+  - {fileID: 8300000, guid: 56e813bd88354448fb9f0a52536449a1, type: 3}
+  tileClips:
+  - {fileID: 8300000, guid: b1e6e75baf8f04ae59f52e341161f1a9, type: 3}
+  pieceClips:
+  - {fileID: 8300000, guid: 6dce900c6b57748dbb2ee112588b2bd9, type: 3}
+  pointsClips:
+  - {fileID: 8300000, guid: 6d894f08d52a44322a56f6afc48f59e0, type: 3}
+  clickClips: []
+  musicVolume: 0.5
+  fxVolume: 1
+  lowPitch: 0.95
+  highPitch: 1.05
 --- !u!1 &432082861
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,6 +746,16 @@ Prefab:
       propertyPath: messageWindow
       value: 
       objectReference: {fileID: 626841292}
+    - target: {fileID: 114754344296071452, guid: c6797474230ba4bd8b0ce1a2ccf8273e,
+        type: 2}
+      propertyPath: movesLeft
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 114754344296071452, guid: c6797474230ba4bd8b0ce1a2ccf8273e,
+        type: 2}
+      propertyPath: scoreGoal
+      value: 10000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c6797474230ba4bd8b0ce1a2ccf8273e, type: 2}
   m_IsPrefabParent: 0
@@ -716,6 +787,7 @@ Transform:
   - {fileID: 1341191763}
   - {fileID: 1233151671}
   - {fileID: 907876307}
+  - {fileID: 398644792}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -835,6 +907,10 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: BeginGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 1193065719576038, guid: 83fa2b7729d3e47a4bc2455a680752d1, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83fa2b7729d3e47a4bc2455a680752d1, type: 2}
