@@ -934,6 +934,10 @@ public class GameBoard : MonoBehaviour {
 				
 				// Increase scoreMultiplier
 				m_scoreMultiplier++;
+				if (SoundManager.Instance != null) {
+					SoundManager.Instance.PlayRandomBonusClip();
+				}
+
 				// return to this coroutine
 				yield return StartCoroutine(ClearAndCollapseRoutine(matches));
 			}

@@ -128,6 +128,10 @@ public class GameManager : Singleton<GameManager> {
 				messageWindow.GetComponent<RectXformMover>().MoveOn();
 				messageWindow.ShowMessage(winIcon, "YOU WON!\n" + currentScore.ToString(), scene.name, "Next Level");
 
+				if (SoundManager.Instance != null) {
+					SoundManager.Instance.PlayRandomWinClip();
+				}
+
 			}
 		} else {
 			// LOOSER
@@ -135,7 +139,9 @@ public class GameManager : Singleton<GameManager> {
 				
 				messageWindow.GetComponent<RectXformMover>().MoveOn();
 				messageWindow.ShowMessage(loseIcon, "YOU LOST!\n" + currentScore.ToString(), scene.name, "Try Again!");
-
+				if (SoundManager.Instance != null) {
+					SoundManager.Instance.PlayRandomLooseClip();
+				}
 			}
 		}
 

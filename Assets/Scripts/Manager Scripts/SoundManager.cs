@@ -6,7 +6,7 @@ public class SoundManager : Singleton<SoundManager> {
 
 	public AudioClip[] musicClips;
 	public AudioClip[] winClips;
-	public AudioClip[] loosClips;
+	public AudioClip[] loseClips;
 	public AudioClip[] bonusClips;
 	public AudioClip[] tileClips;
 	public AudioClip[] pieceClips;
@@ -19,8 +19,8 @@ public class SoundManager : Singleton<SoundManager> {
 	[Range(0,1)]
 	public float fxVolume = 1.0f;
 
-	public float lowPitch = 0.95f;
-	public float highPitch = 1.05f;
+	public float lowPitch = 0.90f;
+	public float highPitch = 1.10f;
 	// Use this for initialization
 	void Start () {
 
@@ -30,7 +30,7 @@ public class SoundManager : Singleton<SoundManager> {
 	public AudioSource PlayClipAtPoint(AudioClip clip, Vector3 position, float volume = 1f, bool loop = false){
 
 		if (clip != null) {
-			GameObject go = new GameObject("SoundFX" + clip.name);
+			GameObject go = new GameObject("Sound_" + clip.name);
 			go.transform.position = position;
 
 			AudioSource source = go.AddComponent<AudioSource>();
@@ -45,7 +45,11 @@ public class SoundManager : Singleton<SoundManager> {
 
 			source.volume = volume;
 			source.Play();
-			Destroy(go, clip.length);
+
+			if (!loop) {
+				Destroy(go, clip.length);
+			}
+
 			return source;
 		}
 
@@ -86,7 +90,7 @@ public class SoundManager : Singleton<SoundManager> {
 
 	public void PlayRandomLooseClip(){
 
-		PlayRandom(loosClips, Vector3.zero, fxVolume);
+		PlayRandom(loseClips, Vector3.zero, fxVolume);
 	}
 
 	public void PlayRandomBonusClip(){

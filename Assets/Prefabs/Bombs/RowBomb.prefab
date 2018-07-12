@@ -119,6 +119,7 @@ MonoBehaviour:
   matchValue: 0
   matchValueRBG: {r: 0, g: 0, b: 0, a: 0}
   scoreValue: 50
+  clearSound: {fileID: 8300000, guid: 520a32be427e54dc9acb2e122c78d63d, type: 3}
   bombType: 2
 --- !u!198 &198213870143916972
 ParticleSystem:

@@ -57,6 +57,8 @@ MonoBehaviour:
   interpolation: 4
   matchValue: 8
   matchValueRBG: {r: 0.011764707, g: 0.8431373, b: 0.83921576, a: 1}
+  scoreValue: 20
+  clearSound: {fileID: 8300000, guid: 8743038399aa64c5db230df6c26f4b71, type: 3}
 --- !u!212 &212378204498429936
 SpriteRenderer:
   m_ObjectHideFlags: 1

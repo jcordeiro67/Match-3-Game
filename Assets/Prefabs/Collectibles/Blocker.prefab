@@ -58,6 +58,7 @@ MonoBehaviour:
   matchValue: 13
   matchValueRBG: {r: 1, g: 0.45882356, b: 0.12941177, a: 1}
   scoreValue: 1000
+  clearSound: {fileID: 8300000, guid: 7690e5c58e2a3423181e84ae618573aa, type: 3}
   clearedByBomb: 1
   clearedByBottom: 0
 --- !u!212 &212073131586095612
